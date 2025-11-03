@@ -95,9 +95,6 @@ a:hover {
 .list-inline i:hover {
   color: black;
 }
-.fa-linkedin-in i:hover {
-  color: blue;
-}
 
 /* Design adjustments using id (1% design remaining) */
 #introduction p {
