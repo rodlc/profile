@@ -5,76 +5,67 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rodolphe Le Coent</title>
 <meta name="description" content="Staff Product Manager and founder of Karkoi. Fintech and AI products at Pennylane, Younited Credit and Submagic">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* Layout: scorecard stack on lin, 640px, grège 1px separators, experience rows unfold into their key results. Karkoi palette, light only by design */
+/* Layout: Scorecard stack on lin, 640px, grège 1px separators, one component per section. Karkoi palette, light only by design */
 :root {
-  --sauge: #29443A; --sauge-tint: #EEF3EF; --ocre: #C4985A; --ocre-dark: #7D5E33;
-  --encre: #1A1A18; --taupe: #6A645B; --grege: #E6E3DE; --lin: #F5F4EF; --white: #FFFFFF;
   color-scheme: light;
+  --sauge: #29443A; --sauge-tint: #EEF3EF; --ocre: #C4985A;
+  --encre: #1A1A18; --taupe: #6A645B; --grege: #E6E3DE;
+  --lin: #F5F4EF; --white: #FFFFFF;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Avenir Next', 'Avenir', 'Helvetica Neue', 'Segoe UI', sans-serif; background: var(--lin); color: var(--encre); line-height: 1.55; font-size: 13px; -webkit-font-smoothing: antialiased; }
+body { background: var(--lin); color: var(--encre); font: 400 14px/1.6 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
-a:focus-visible, summary:focus-visible { outline: 2px solid var(--ocre); outline-offset: 2px; }
-.page { max-width: 640px; margin: 0 auto; padding-inline: max(28px, env(safe-area-inset-left, 0px)) max(28px, env(safe-area-inset-right, 0px)); padding-block: 56px 72px; }
+a:focus-visible { outline: 2px solid var(--ocre); outline-offset: 2px; }
 
-.header { display: grid; grid-template-columns: 56px 1fr; gap: 16px; align-items: center; margin-bottom: 28px; }
-.photo { width: 56px; height: 56px; border-radius: 99px; object-fit: cover; display: block; }
-.logo { font-size: 24px; font-weight: 700; color: var(--sauge); letter-spacing: -0.02em; margin-bottom: 4px; }
-.tagline { font-size: 15px; color: var(--taupe); }
+.page { max-width: 640px; margin: 0 auto; padding-inline: max(28px, env(safe-area-inset-left, 0px)) max(28px, env(safe-area-inset-right, 0px)); padding-block: 56px 72px; display: flex; flex-direction: column; gap: 40px; }
 
-.pitch { background: var(--sauge); color: var(--lin); padding: 28px 32px; border-radius: 8px; margin-bottom: 48px; font-size: 15px; line-height: 1.7; text-wrap: balance; }
-.pitch strong { color: var(--ocre); font-weight: 600; }
-.pitch .label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ocre); margin-bottom: 8px; }
+.header { display: flex; align-items: center; gap: 16px; }
+.photo { width: 48px; height: 48px; border-radius: 99px; object-fit: cover; display: block; flex: none; }
+.logo { font-size: 20px; font-weight: 600; color: var(--sauge); }
+.tagline { color: var(--taupe); }
 
-.s { margin-bottom: 40px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.s-title { font-size: 10px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--sauge); }
-.lead { font-size: 13px; color: var(--taupe); }
+.pitch { background: var(--sauge); color: var(--lin); border-radius: 8px; padding: 24px 28px; line-height: 1.7; text-wrap: balance; }
+.pitch .label { display: block; font-weight: 600; margin-bottom: 8px; }
+.pitch strong { color: var(--white); font-weight: 600; }
 
 .box { display: grid; gap: 1px; background: var(--grege); border-radius: 8px; overflow: hidden; }
 .metrics { grid-template-columns: repeat(3, 1fr); }
-.m { background: var(--white); text-align: center; padding: 20px 12px; }
-.m-val { font-size: 24px; font-weight: 700; color: var(--sauge); font-variant-numeric: tabular-nums; }
-.m-label { font-size: 11px; color: var(--taupe); margin-top: 4px; }
+.m { background: var(--white); padding: 20px 16px; text-align: center; }
+.m-val { font-size: 20px; font-weight: 600; color: var(--sauge); }
+.m-label { color: var(--taupe); }
+
+.s { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.s-title { font-size: 20px; font-weight: 600; color: var(--sauge); }
 
 .rows { display: flex; flex-direction: column; gap: 1px; background: var(--grege); border-radius: 8px; overflow: hidden; }
-.xp { background: var(--white); }
-.xp summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto 16px; gap: 16px; align-items: center; padding: 14px 20px; }
-.xp summary::-webkit-details-marker { display: none; }
-.xp summary:hover { background: var(--sauge-tint); }
-.xp[open] summary { background: var(--sauge-tint); }
-.xp-name { font-weight: 600; color: var(--sauge); }
-.xp-role { color: var(--taupe); }
-.xp-years { font-size: 11px; color: var(--taupe); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.xp-years.now { color: var(--ocre-dark); font-weight: 600; }
-.chev { width: 8px; height: 8px; border-right: 1.5px solid var(--taupe); border-bottom: 1.5px solid var(--taupe); transform: rotate(45deg); margin-top: -4px; transition: transform .15s; }
-.xp[open] .chev { transform: rotate(-135deg); margin-top: 4px; }
-.xp-body { padding: 4px 20px 16px; display: flex; flex-direction: column; gap: 12px; }
-.xp-context { color: var(--taupe); }
-.comps { grid-template-columns: repeat(3, 1fr); }
-.comp { background: var(--white); padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.comp-name { font-size: 12px; font-weight: 600; color: var(--sauge); }
-.comp-val { font-size: 20px; font-weight: 700; color: var(--ocre-dark); font-variant-numeric: tabular-nums; }
-.comp-sub { font-size: 11px; color: var(--taupe); }
+.p-row { display: grid; grid-template-columns: 140px 1fr 96px; gap: 16px; align-items: baseline; background: var(--white); padding: 12px 20px; }
+.p-head { background: var(--lin); color: var(--taupe); }
+.p-name { font-weight: 600; color: var(--sauge); }
+.p-desc { color: var(--taupe); min-width: 0; }
+.p-years { text-align: right; color: var(--taupe); white-space: nowrap; }
+.p-head .p-name, .p-head .p-desc, .p-head .p-years { font-weight: 400; color: var(--taupe); }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 99px; background: var(--ocre); margin-right: 8px; vertical-align: 1px; }
 
 .pos { display: flex; flex-direction: column; gap: 1px; background: var(--grege); border-radius: 8px; overflow: hidden; }
-.pos-item { display: grid; grid-template-columns: 180px 1fr; gap: 16px; background: var(--white); padding: 14px 20px; }
+.pos-item { display: grid; grid-template-columns: 140px 1fr; gap: 16px; background: var(--white); padding: 12px 20px; }
 .pos-item:hover { background: var(--sauge-tint); }
 .pos-name { font-weight: 600; color: var(--sauge); }
 .pos-desc { color: var(--taupe); min-width: 0; overflow-wrap: anywhere; }
 
-.footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--grege); font-size: 11px; color: var(--taupe); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; color: var(--taupe); border-top: 1px solid var(--grege); padding-top: 14px; }
 
-@media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
 @media (max-width: 560px) {
   .page { padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 48px; }
-  .pitch { padding: 24px 20px; }
-  .metrics, .comps { grid-template-columns: 1fr; }
-  .xp summary { grid-template-columns: 1fr 16px; gap: 2px 16px; padding: 12px 16px; }
-  .xp-years { grid-column: 1; }
-  .chev { grid-row: 1 / span 2; grid-column: 2; }
-  .xp-body { padding: 4px 16px 16px; }
-  .pos-item { grid-template-columns: 1fr; gap: 4px; padding: 12px 16px; }
+  .pitch { padding: 20px; }
+  .metrics { grid-template-columns: 1fr; }
+  .p-row { grid-template-columns: 1fr auto; gap: 4px 16px; padding: 12px 16px; }
+  .p-desc { grid-column: 1 / -1; grid-row: 2; }
+  .p-head .p-desc { display: none; }
+  .pos-item { grid-template-columns: 96px 1fr; padding: 12px 16px; }
 }
 </style>
 </head>
@@ -90,87 +81,34 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--ocre); outline
 
   <section class="pitch">
     <span class="label">In one sentence</span>
-    7 years shipping <strong>fintech and AI products</strong>, now building Karkoi from 0 to 1 alone: <strong>AI agents for accounting firms</strong>
+    7 years shipping <strong>fintech and AI products</strong>, now building <strong>Karkoi</strong> from 0 to 1 alone
   </section>
 
-  <section class="s">
-    <div class="box metrics">
-      <div class="m"><div class="m-val">€100M</div><div class="m-label">payments, 0 incident</div></div>
-      <div class="m"><div class="m-val">150K</div><div class="m-label">users on one product</div></div>
-      <div class="m"><div class="m-val">€1M</div><div class="m-label">fees found by Karkoi</div></div>
-    </div>
+  <section class="box metrics" aria-label="Key figures">
+    <div class="m"><div class="m-val">€100M</div><div class="m-label">payments, 0 incident</div></div>
+    <div class="m"><div class="m-val">150K</div><div class="m-label">users on one product</div></div>
+    <div class="m"><div class="m-val">€1M</div><div class="m-label">fees found by Karkoi</div></div>
   </section>
 
   <section class="s">
     <h2 class="s-title">Experience</h2>
-    <div class="lead">Newest first. Open a line for its results</div>
     <div class="rows">
-      <details class="xp">
-        <summary><div><span class="xp-name">Karkoi</span> <span class="xp-role">· Founder</span></div><span class="xp-years now">2026 · now</span><span class="chev" aria-hidden="true"></span></summary>
-        <div class="xp-body">
-          <div class="xp-context">AI agents that surface advisory missions across accounting portfolios. Product and code, built alone</div>
-          <div class="box comps">
-            <div class="comp"><div class="comp-name">Detection</div><div class="comp-val">€1M</div><div class="comp-sub">fees on a 500-company pilot</div></div>
-            <div class="comp"><div class="comp-name">Categories</div><div class="comp-val">5</div><div class="comp-sub">advisory missions</div></div>
-            <div class="comp"><div class="comp-name">Harness</div><div class="comp-val">100%</div><div class="comp-sub">computations explained</div></div>
-          </div>
-        </div>
-      </details>
-      <details class="xp">
-        <summary><div><span class="xp-name">Submagic</span> <span class="xp-role">· Staff Product Manager</span></div><span class="xp-years">2026</span><span class="chev" aria-hidden="true"></span></summary>
-        <div class="xp-body">
-          <div class="xp-context">$8M to $10M ARR. AI growth experimentation from zero with Claude Code and PostHog</div>
-          <div class="box comps">
-            <div class="comp"><div class="comp-name">Paywall</div><div class="comp-val">+50%</div><div class="comp-sub">subscriptions, +30% new MRR</div></div>
-            <div class="comp"><div class="comp-name">AI onboarding</div><div class="comp-val">+30%</div><div class="comp-sub">subscriptions, +15% new MRR</div></div>
-            <div class="comp"><div class="comp-name">Credits pricing</div><div class="comp-val">+100%</div><div class="comp-sub">expansion MRR, −10% churn</div></div>
-          </div>
-        </div>
-      </details>
-      <details class="xp">
-        <summary><div><span class="xp-name">Pennylane</span> <span class="xp-role">· Product Manager</span></div><span class="xp-years">2021 · 2024</span><span class="chev" aria-hidden="true"></span></summary>
-        <div class="xp-body">
-          <div class="xp-context">€30M to €1B valuation. Among the first PMs of the financial B2B SaaS</div>
-          <div class="box comps">
-            <div class="comp"><div class="comp-name">Payment APIs</div><div class="comp-val">€100M</div><div class="comp-sub">processed, 0 incident</div></div>
-            <div class="comp"><div class="comp-name">Expenses</div><div class="comp-val">150K</div><div class="comp-sub">users, AI tagging</div></div>
-            <div class="comp"><div class="comp-name">Mobile</div><div class="comp-val">4.7★</div><div class="comp-sub">10K users, iOS and Android</div></div>
-          </div>
-        </div>
-      </details>
-      <details class="xp">
-        <summary><div><span class="xp-name">Younited Credit</span> <span class="xp-role">· Product Manager</span></div><span class="xp-years">2019 · 2021</span><span class="chev" aria-hidden="true"></span></summary>
-        <div class="xp-body">
-          <div class="xp-context">€400M+ valuation. Customer account and internal CRM of a consumer lender</div>
-          <div class="box comps">
-            <div class="comp"><div class="comp-name">User account</div><div class="comp-val">+300%</div><div class="comp-sub">users</div></div>
-            <div class="comp"><div class="comp-name">Internal CRM</div><div class="comp-val">5</div><div class="comp-sub">countries, from 0 to 1</div></div>
-            <div class="comp"><div class="comp-name">Self-service</div><div class="comp-val">−90%</div><div class="comp-sub">calls and emails</div></div>
-          </div>
-        </div>
-      </details>
-      <details class="xp">
-        <summary><div><span class="xp-name">HireSweet</span> <span class="xp-role">· Product Analyst</span></div><span class="xp-years">2018 · 2019</span><span class="chev" aria-hidden="true"></span></summary>
-        <div class="xp-body">
-          <div class="xp-context">€0 to €5M valuation. Operations and ML engine iterations</div>
-          <div class="box comps">
-            <div class="comp"><div class="comp-name">Sourcing</div><div class="comp-val">500+</div><div class="comp-sub">candidates via ML campaigns</div></div>
-            <div class="comp"><div class="comp-name">Team</div><div class="comp-val">3</div><div class="comp-sub">hires onboarded</div></div>
-            <div class="comp"><div class="comp-name">Dashboards</div><div class="comp-val">10</div><div class="comp-sub">internal users</div></div>
-          </div>
-        </div>
-      </details>
+      <div class="p-row p-head"><span class="p-name">Company</span><span class="p-desc">Key result</span><span class="p-years">Newest first</span></div>
+      <div class="p-row"><span class="p-name"><span class="dot" aria-hidden="true"></span>Karkoi</span><span class="p-desc">AI agents for accounting firms</span><span class="p-years">2026 to now</span></div>
+      <div class="p-row"><span class="p-name">Submagic</span><span class="p-desc">$8M to $10M ARR</span><span class="p-years">2026</span></div>
+      <div class="p-row"><span class="p-name">Pennylane</span><span class="p-desc">€30M to €1B valuation</span><span class="p-years">2021 to 2024</span></div>
+      <div class="p-row"><span class="p-name">Younited Credit</span><span class="p-desc">Consumer lending, 5 countries</span><span class="p-years">2019 to 2021</span></div>
+      <div class="p-row"><span class="p-name">HireSweet</span><span class="p-desc">ML sourcing, €0 to €5M</span><span class="p-years">2018 to 2019</span></div>
     </div>
   </section>
 
   <section class="s">
     <h2 class="s-title">Links</h2>
     <div class="pos">
-      <a class="pos-item" href="https://www.linkedin.com/in/rodlc/" target="_blank" rel="noopener"><span class="pos-name">LinkedIn</span><span class="pos-desc">Career and recommendations</span></a>
-      <a class="pos-item" href="https://github.com/rodlc" target="_blank" rel="noopener"><span class="pos-name">GitHub</span><span class="pos-desc">Code and open projects</span></a>
-      <a class="pos-item" href="https://karkoi.com" target="_blank" rel="noopener"><span class="pos-name">Karkoi</span><span class="pos-desc">AI agents for accounting firms</span></a>
+      <a class="pos-item" href="https://www.linkedin.com/in/rodlc/" target="_blank" rel="noopener"><span class="pos-name">LinkedIn</span><span class="pos-desc">in/rodlc</span></a>
+      <a class="pos-item" href="https://github.com/rodlc" target="_blank" rel="noopener"><span class="pos-name">GitHub</span><span class="pos-desc">rodlc</span></a>
+      <a class="pos-item" href="https://karkoi.com" target="_blank" rel="noopener"><span class="pos-name">Karkoi</span><span class="pos-desc">karkoi.com</span></a>
       <a class="pos-item" href="mailto:rodolphe@lecoent.net"><span class="pos-name">Email</span><span class="pos-desc">rodolphe@lecoent.net</span></a>
-      <a class="pos-item" href="https://www.instagram.com/highway_to_zen/" target="_blank" rel="noopener"><span class="pos-name">Instagram</span><span class="pos-desc">Montreal to Ushuaïa by van</span></a>
     </div>
   </section>
 
