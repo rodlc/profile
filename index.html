@@ -4,84 +4,450 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rodolphe Le Coent</title>
-<meta name="description" content="Staff Product Manager and founder of Karkoi. Links to LinkedIn, GitHub, Karkoi and email">
+<meta name="description" content="Product manager and founder of Karkoi. Seven years at Younited, Pennylane and Submagic">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-/* Layout: a profile card then a 2 × 2 grid of links with their icon on lin, 640px, grège 1px separators. Karkoi palette, light only by design */
+/* Layout: the August portfolio read top to bottom (company, then each project: title, one line, screenshot, figures, description),
+   with a timeline on its left from the header to the last school: dates, a rail that fills while scrolling, the company logo on the rail.
+   Karkoi palette and type scale: 14/20 read, 20 for names and figures, weights 400 and 600. Light only by design */
 :root {
   color-scheme: light;
   --sauge: #29443A; --sauge-tint: #EEF3EF; --ocre: #C4985A;
-  --encre: #1A1A18; --taupe: #6A645B; --grege: #E6E3DE;
-  --lin: #F5F4EF; --white: #FFFFFF;
+  --encre: #1A1A18; --taupe: #6A645B; --grege: #E6E3DE; --rail-rest: #D3CEC6;
+  --lin: #F5F4EF; --white: #FFFFFF; --error: #9B3B2A;
+  --text: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --label: 104px; --rail: 88px;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--lin); color: var(--encre); font: 400 14px/1.6 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+body { background: var(--lin); color: var(--encre); font: 400 14px/20px var(--text); -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
-a:focus-visible { outline: 2px solid var(--ocre); outline-offset: 2px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--ocre); outline-offset: 2px; border-radius: 2px; }
+img { max-width: 100%; display: block; }
+p { text-wrap: pretty; }
+strong { font-weight: 600; }
+em { font-style: italic; }
+.muted { color: var(--taupe); }
 
-.page { max-width: 640px; margin: 0 auto; padding-inline: max(28px, env(safe-area-inset-left, 0px)) max(28px, env(safe-area-inset-right, 0px)); padding-block: 72px; display: flex; flex-direction: column; gap: 32px; }
+.page { max-width: 848px; margin: 0 auto; padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); padding-block: 64px; }
 
-.profile { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
-.photo { width: 96px; height: 96px; border-radius: 99px; object-fit: cover; display: block; margin-bottom: 12px; }
-.name { font-size: 20px; font-weight: 600; color: var(--sauge); }
+/* Timeline */
+.track { position: relative; display: flex; flex-direction: column; }
+.rail { position: absolute; left: calc(var(--label) + var(--rail) / 2 - 1px); width: 2px; top: 0; height: 0; background: var(--rail-rest); }
+.rail-fill { position: absolute; inset: 0 0 auto; height: 0; background: var(--sauge); }
+.row { display: grid; grid-template-columns: var(--label) var(--rail) minmax(0, 1fr); align-items: start; }
+.row-date { grid-column: 1; grid-row: 1; text-align: right; color: var(--taupe); line-height: 28px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.mark { grid-column: 2; grid-row: 1; justify-self: center; margin-top: 2px; width: 24px; height: 24px; position: relative; z-index: 1; display: grid; place-items: center; background: var(--lin); box-shadow: 0 0 0 4px var(--lin); border-radius: 6px; }
+.mark img { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; box-shadow: 0 0 0 1px var(--grege); transition: box-shadow .2s ease-out; }
+.mark-dot::before { content: ""; width: 10px; height: 10px; border-radius: 99px; border: 2px solid var(--rail-rest); background: var(--lin); transition: border-color .2s ease-out, background .2s ease-out; }
+.mark-emoji { font-size: 18px; line-height: 24px; }
+.mark-photo { margin-top: 0; width: 56px; height: 56px; border-radius: 99px; }
+.mark-photo img { width: 56px; height: 56px; border-radius: 99px; }
+.row.is-past .mark img { box-shadow: 0 0 0 2px var(--sauge); }
+.row.is-past .mark-dot::before { border-color: var(--sauge); background: var(--sauge); }
+.content { grid-column: 3; grid-row: 1; display: flex; flex-direction: column; min-width: 0; }
+
+/* Header */
+.name { font-size: 20px; line-height: 28px; letter-spacing: -0.02em; font-weight: 600; color: var(--sauge); }
+.about { margin-top: 12px; max-width: 64ch; }
+.role { margin-top: 4px; }
+.role .muted { white-space: normal; }
+.links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 16px; }
+.link { display: inline-flex; align-items: center; gap: 6px; color: var(--sauge); border-bottom: 1px solid transparent; transition: border-color .15s ease-out; }
+.link:hover { border-color: var(--sauge); }
+.link svg { width: 14px; height: 14px; flex-shrink: 0; }
+.link .fill { fill: currentColor; }
+.link .stroke { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Figures, the same boxes everywhere */
+.metrics { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 1px; background: var(--grege); border: 1px solid var(--grege); border-radius: 8px; overflow: hidden; }
+.m { background: var(--white); padding: 12px 16px; min-width: 0; }
+.m-val { font-size: 20px; line-height: 28px; letter-spacing: -0.02em; color: var(--sauge); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.m-lbl { color: var(--taupe); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Company and projects */
+.company a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.company { font-size: 20px; line-height: 28px; letter-spacing: -0.02em; font-weight: 600; color: var(--sauge); }
 .role { color: var(--taupe); }
+.sep { color: var(--rail-rest); margin: 0 4px; }
+.headline { margin-top: 12px; max-width: 64ch; }
+.context { margin-top: 4px; max-width: 64ch; color: var(--taupe); }
+.company-kpis { margin-top: 16px; }
+/* Projects: their own dated points on the rail, smaller than a company's logo */
+.row + .row { margin-top: 72px; }
+.row + .project-row { margin-top: 40px; }
+.project-row .row-date { line-height: 20px; }
+.project-row .mark { margin-top: -2px; }
+.project-row .mark-dot::before { width: 8px; height: 8px; }
+.project-title { font-size: 14px; line-height: 20px; font-weight: 600; }
+.project-desc { max-width: 64ch; margin-top: 4px; color: var(--taupe); }
+.project-row .metrics, .project-row .shot { margin-top: 16px; }
+.shot { position: relative; border: 1px solid var(--grege); border-radius: 8px; overflow: hidden; background: var(--white); }
+.shot { aspect-ratio: 16 / 10; max-width: 100%; }
+.shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+/* Blurred like the August portfolio: the shape of the screen invites the click, its content waits behind the form */
+.shot.locked img { filter: blur(3px); transform: scale(1.02); }
+.veil { position: absolute; inset: auto 0 0; height: 55%; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 24px; background: linear-gradient(to bottom, rgba(245, 244, 239, 0), var(--lin) 70%); }
+.unlock { font: inherit; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 99px; background: var(--sauge); color: var(--white); border: 0; cursor: pointer; transition: background .15s ease-out; }
+.unlock:hover { background: var(--encre); }
+.unlock svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.locked-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 16px; border: 1px solid var(--grege); border-radius: 8px; background: var(--white); color: var(--taupe); }
 
-.links { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--grege); border-radius: 8px; overflow: hidden; }
-.link { background: var(--white); padding: 20px; display: grid; grid-template-columns: 40px 1fr 16px; gap: 0 16px; align-items: center; min-width: 0; transition: background .15s; }
-.link:hover { background: var(--sauge-tint); }
-.icon { grid-row: 1 / span 2; width: 40px; height: 40px; border-radius: 8px; background: var(--sauge-tint); display: grid; place-items: center; transition: background .15s; }
-.link:hover .icon { background: var(--white); }
-.icon svg { width: 20px; height: 20px; display: block; }
-.icon .fill { fill: var(--sauge); }
-.icon .stroke { fill: none; stroke: var(--sauge); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.link-name { font-weight: 600; color: var(--sauge); grid-column: 2; }
-.link-handle { color: var(--taupe); grid-column: 2; overflow-wrap: anywhere; min-width: 0; }
-.arrow { grid-column: 3; grid-row: 1 / span 2; width: 8px; height: 8px; border-top: 1.5px solid var(--ocre); border-right: 1.5px solid var(--ocre); transform: rotate(45deg); justify-self: center; transition: transform .15s; }
-.link:hover .arrow { transform: translateX(2px) rotate(45deg); }
+.footer { margin-top: 64px; padding-left: calc(var(--label) + var(--rail)); color: var(--taupe); }
+.inline-date { display: none; }
+.heart { width: 13px; height: 13px; fill: var(--ocre); display: inline-block; vertical-align: -2px; margin: 0 2px; }
+.company .sep { font-weight: 400; }
 
-.footer { text-align: center; color: var(--taupe); text-wrap: balance; }
-.heart { width: 14px; height: 14px; fill: var(--ocre); display: inline-block; vertical-align: -2px; margin: 0 2px; }
+/* Request dialog: the fields of Karkoi's sign-up card (label above, white input, 8px radius, sage focus ring, full-width button) */
+dialog { margin: auto; width: min(420px, calc(100% - 32px)); border: 1px solid var(--grege); border-radius: 8px; background: var(--white); color: var(--encre); padding: 0; }
+dialog::backdrop { background: rgba(26, 26, 24, 0.35); }
+[hidden] { display: none !important; }
+.sheet { padding: 32px; display: flex; flex-direction: column; }
+.sheet-head { margin-bottom: 24px; }
+.sheet-title { font-size: 20px; line-height: 28px; letter-spacing: -0.02em; font-weight: 600; color: var(--encre); text-wrap: balance; }
+.sheet-intro { margin-top: 4px; color: var(--taupe); }
+.field { display: flex; flex-direction: column; margin-bottom: 16px; }
+.field label { margin-bottom: 8px; color: var(--encre); }
+.field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+@media (max-width: 480px) { .field-row { grid-template-columns: minmax(0, 1fr); } }
+.field input { font: inherit; color: var(--encre); background: var(--white); border: 1px solid var(--grege); border-radius: 8px; padding: 12px 16px; width: 100%; transition: border-color .15s ease-out, box-shadow .15s ease-out; }
+.field input::placeholder { color: var(--taupe); }
+.field input:focus { outline: none; border-color: var(--sauge); box-shadow: 0 0 0 3px rgba(41, 68, 58, 0.15); }
+.trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.actions { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.btn { font: inherit; font-weight: 600; border-radius: 8px; padding: 12px 16px; width: 100%; cursor: pointer; border: 1px solid var(--sauge); transition: background .15s ease-out, border-color .15s ease-out; }
+.btn-primary { background: var(--sauge); color: var(--white); }
+.btn-primary:hover { background: var(--encre); border-color: var(--encre); }
+.btn-primary:disabled { opacity: .6; cursor: progress; }
+.btn-quiet { width: auto; align-self: center; border: 0; padding: 4px 8px; background: none; color: var(--taupe); font-weight: 400; }
+.btn-quiet:hover { color: var(--sauge); text-decoration: underline; }
+.error { color: var(--error); margin-bottom: 16px; }
+.address { color: var(--sauge); user-select: all; }
 
-@media (prefers-reduced-motion: reduce) { .link, .icon, .arrow { transition: none; } }
-@media (max-width: 560px) {
-  .page { padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px)); padding-block: 48px; }
-  .links { grid-template-columns: 1fr; }
-  .link { padding: 16px; }
+@media (prefers-reduced-motion: reduce) { *, *::before { transition: none !important; } }
+@media (max-width: 720px) {
+  :root { --label: 0px; --rail: 40px; }
+  .page { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px; }
+  .row + .row { margin-top: 56px; }
+  .row + .project-row { margin-top: 32px; }
+  .row-date { display: none; }
+  .inline-date { display: inline; }
+  .mark-photo, .mark-photo img { width: 40px; height: 40px; }
+  .metrics { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); }
+  .m { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 }
 </style>
 </head>
 <body>
+
 <main class="page">
-  <header class="profile">
-    <img class="photo" src="./shared/images/profile.png" alt="Rodolphe Le Coent">
-    <h1 class="name">Rodolphe Le Coent</h1>
-    <p class="role">Staff Product Manager · Founder @Karkoi</p>
-  </header>
+  <div class="track">
+    <div class="rail" aria-hidden="true"><div class="rail-fill"></div></div>
 
-  <nav class="links" aria-label="Links">
-    <a class="link" href="https://www.linkedin.com/in/rodlc/" target="_blank" rel="noopener">
-      <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="fill" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.064 2.064 0 1 1 0-4.128 2.064 2.064 0 0 1 0 4.128zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span>
-      <span class="link-name">LinkedIn</span><span class="link-handle">in/rodlc</span><span class="arrow" aria-hidden="true"></span>
-    </a>
-    <a class="link" href="https://karkoi.com" target="_blank" rel="noopener">
-      <span class="icon" aria-hidden="true"><svg viewBox="-6 -126 94 134"><mask id="km-cuts"><rect x="-20" y="-200" width="200" height="260" fill="#fff"/><rect x="-10" y="8" width="60" height="2.6" fill="#000" transform="translate(5.0 -89.36) rotate(15.66)"/><rect x="0" y="-14" width="40" height="2.4" fill="#000"/></mask><clipPath id="km-strap"><rect x="29.0" y="-200" width="200" height="260"/></clipPath><g transform="translate(11 -91.68) rotate(-4)"><rect x="-1.9" y="-27" width="3.8" height="36" rx="1.9" fill="#29443A"/><path d="M-1.9 -11 L-5.8 -14.9 V-29.5 L-1.9 -25.6 Z M1.9 -11 L5.8 -14.9 V-29.5 L1.9 -25.6 Z" fill="#C4985A"/></g><g transform="translate(20.5 -86.01) rotate(4)"><rect x="-1.9" y="-27" width="3.8" height="36" rx="1.9" fill="#29443A"/><path d="M-1.9 -11 L-5.8 -14.9 V-29.5 L-1.9 -25.6 Z M1.9 -11 L5.8 -14.9 V-29.5 L1.9 -25.6 Z" fill="#C4985A"/></g><path d="M5.0 -89.36 L26.4 -83.36 L24.2 -9 Q23.7 0 16 0 Q8.3 0 7.8 -9 Z" fill="#29443A" mask="url(#km-cuts)"/><path d="M59.64 0.0 23.04 -44.04 58.68 -84.36H79.08L39.36 -40.56V-48.12L80.4 0.0Z" fill="#29443A" clip-path="url(#km-strap)"/></svg></span>
-      <span class="link-name">Karkoi</span><span class="link-handle">karkoi.com</span><span class="arrow" aria-hidden="true"></span>
-    </a>
-    <a class="link" href="https://github.com/rodlc" target="_blank" rel="noopener">
-      <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="fill" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></span>
-      <span class="link-name">GitHub</span><span class="link-handle">github.com/rodlc</span><span class="arrow" aria-hidden="true"></span>
-    </a>
-    <a class="link" href="mailto:rodolphe@lecoent.net">
-      <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect class="stroke" x="3" y="5" width="18" height="14" rx="2"/><path class="stroke" d="m4 7 8 6 8-6"/></svg></span>
-      <span class="link-name">Email</span><span class="link-handle">rodolphe@lecoent.net</span><span class="arrow" aria-hidden="true"></span>
-    </a>
-  </nav>
+    <header class="row">
+      <span class="row-date"></span>
+      <span class="mark mark-photo" aria-hidden="true"><img src="images/profile.png" alt=""></span>
+      <div class="content">
+        <h1 class="name">Rodolphe Le Coent</h1>
+        <p class="role">Staff Product Manager <span class="sep">•</span> Founder at Karkoi <span class="sep">•</span> <span class="muted">Greater Lyon Area</span></p>
+        <p class="about"><strong>7 years shipping products at high-growth startups</strong>, from <em>B2C credit</em> to <em>SMB SaaS</em> and <em>AI video</em></p>
+        <nav class="links" aria-label="Links">
+          <a class="link" href="https://www.linkedin.com/in/rodlc/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.064 2.064 0 1 1 0-4.128 2.064 2.064 0 0 1 0 4.128zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a>
+          <a class="link" href="https://github.com/rodlc" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
+          <a class="link" href="https://karkoi.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="stroke" cx="12" cy="12" r="9"/><path class="stroke" d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>karkoi.com</a>
+          <a class="link" href="mailto:rodolphe@lecoent.net"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="stroke" x="3" y="5" width="18" height="14" rx="2"/><path class="stroke" d="m4 7 8 6 8-6"/></svg>rodolphe@lecoent.net</a>
+        </nav>
+      </div>
+    </header>
 
-  <footer class="footer">
-    © 2026 Rodolphe Le Coent · <span style="white-space: nowrap">Made with <svg class="heart" viewBox="0 0 24 24" role="img" aria-label="love"><path d="M12 21s-7.5-4.6-9.9-9.1C.6 8.9 2.4 4.5 6.6 4.5c2.3 0 3.9 1.3 5.4 3.1 1.5-1.8 3.1-3.1 5.4-3.1 4.2 0 6 4.4 4.5 7.4C19.5 16.4 12 21 12 21z"/></svg> in Lyon, France</span>
-  </footer>
+    <article class="row">
+      <p class="row-date">2026 – now</p>
+      <a class="mark" href="https://karkoi.com" target="_blank" rel="noopener" aria-label="Karkoi website"><img src="images/logo-karkoi.png" alt=""></a>
+      <div class="content">
+        <h2 class="company"><a href="https://karkoi.com" target="_blank" rel="noopener">Karkoi</a></h2>
+        <p class="role"><span class="inline-date">2026 – now <span class="sep">•</span> </span>Founder <span class="sep">•</span> Lyon <span class="sep">•</span> 6 months</p>
+        <p class="headline"><strong>0 → 1 launch</strong></p><p class="context">AI agents that surface advisory missions across accounting portfolios. Found, built and sell it solo</p>
+        <div class="company-kpis"><div class="metrics"><div class="m"><div class="m-val">€3K</div><div class="m-lbl">ARR</div></div><div class="m"><div class="m-val">€110K</div><div class="m-lbl">Fees detected</div></div><div class="m"><div class="m-val">13</div><div class="m-lbl">Accounting firms</div></div></div></div>
+      </div>
+    </article>
+    <section class="row project-row">
+      <p class="row-date">Nov 2026</p>
+      <span class="mark mark-dot" aria-hidden="true"></span>
+      <div class="content">
+        <h3 class="project-title"><span class="inline-date">Nov 2026 <span class="sep">•</span> </span>MCP Server</h3>
+        <p class="project-desc">Firms ask <em>Claude</em> about their portfolio and <strong>Karkoi answers from its detections</strong></p>
+        <div class="metrics"><div class="m"><div class="m-val">1 question</div><div class="m-lbl">Portfolio review</div></div><div class="m"><div class="m-val">21</div><div class="m-lbl">MCP tools</div></div><div class="m"><div class="m-val">OAuth</div><div class="m-lbl">Any AI client</div></div></div>
+        <figure class="shot"><img src="images/karkoi-mcp.jpg" alt="Claude answering a question on a firm&#x27;s Karkoi pipeline through MCP" loading="lazy"></figure>
+      </div>
+    </section>
+    <section class="row project-row">
+      <p class="row-date">Sep 2026</p>
+      <span class="mark mark-dot" aria-hidden="true"></span>
+      <div class="content">
+        <h3 class="project-title"><span class="inline-date">Sep 2026 <span class="sep">•</span> </span>Agentic Platform</h3>
+        <p class="project-desc">Accountants question the Karkoi agent under a detection and it <strong>answers from the company's <em>Pennylane</em> books</strong></p>
+        <div class="metrics"><div class="m"><div class="m-val">@mention</div><div class="m-lbl">In any comment thread</div></div><div class="m"><div class="m-val">6</div><div class="m-lbl">Ledger read tools</div></div><div class="m"><div class="m-val">1 company</div><div class="m-lbl">Scope per thread</div></div></div>
+        <figure class="shot"><img src="images/karkoi-agent.jpg" alt="Under a cash detection, an accountant asks the Karkoi agent for a bank balance and gets the answer from Pennylane" loading="lazy"></figure>
+      </div>
+    </section>
+    <section class="row project-row">
+      <p class="row-date">Jul 2026</p>
+      <span class="mark mark-dot" aria-hidden="true"></span>
+      <div class="content">
+        <h3 class="project-title"><span class="inline-date">Jul 2026 <span class="sep">•</span> </span>Accounting Engine</h3>
+        <p class="project-desc">Detects advisory missions in each company's <em>Pennylane</em> ledgers, <strong>every computation explained</strong></p>
+        <div class="metrics"><div class="m"><div class="m-val">€870K</div><div class="m-lbl">Client gains</div></div><div class="m"><div class="m-val">680</div><div class="m-lbl">Detections</div></div><div class="m"><div class="m-val">5,900</div><div class="m-lbl">Companies analysed</div></div></div>
+        <figure class="shot"><img src="images/karkoi-detections.jpg" alt="Karkoi: advisory missions detected across a firm&#x27;s clients" loading="lazy"></figure>
+      </div>
+    </section>
+    <article class="row">
+      <p class="row-date">2026</p>
+      <a class="mark" href="https://www.submagic.co" target="_blank" rel="noopener" aria-label="Submagic website"><img src="images/logo-submagic.png" alt=""></a>
+      <div class="content">
+        <h2 class="company"><a href="https://www.submagic.co" target="_blank" rel="noopener">Submagic</a></h2>
+        <p class="role"><span class="inline-date">2026 <span class="sep">•</span> </span>Staff Product Manager <span class="sep">•</span> Freelance <span class="sep">•</span> 6 months</p>
+        <p class="headline"><strong>$8M → $10M ARR</strong></p><p class="context">Bootstrapped AI growth experimentation from zero with <em>Claude Code</em> and <em>PostHog</em></p>
+        <div class="company-kpis"><div class="metrics"><div class="m"><div class="m-val">3M+</div><div class="m-lbl">Users</div></div><div class="m"><div class="m-val">−52%</div><div class="m-lbl">Analytics costs</div></div><div class="m"><div class="m-val">25+</div><div class="m-lbl">A/B tests run</div></div></div></div>
+      </div>
+    </article>
+    <section class="row project-row">
+      <p class="row-date">May 2026</p>
+      <span class="mark mark-dot" aria-hidden="true"></span>
+      <div class="content">
+        <h3 class="project-title"><span class="inline-date">May 2026 <span class="sep">•</span> </span>Credits Pricing</h3>
+        <p class="project-desc">Replaced per-feature limits with a <strong>unified credit system</strong> to unlock upsell revenue</p>
+        <div class="metrics"><div class="m"><div class="m-val">+100%</div><div class="m-lbl">Expansion MRR</div></div><div class="m"><div class="m-val">89% → 100%+</div><div class="m-lbl">Net revenue retention</div></div><div class="m"><div class="m-val">−10%</div><div class="m-lbl">Churned MRR</div></div></div>
+        <figure class="shot locked"><img src="images/submagic-credits.jpg" alt="Submagic credits pricing page" loading="lazy"><div class="veil"><button class="unlock" type="button" data-case="Submagic credits pricing"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>See the full case study</button></div></figure>
+      </div>
+    </section>
+    <section class="row project-row">
+      <p class="row-date">Mar 2026</p>
+      <span class="mark mark-dot" aria-hidden="true"></span>
+      <div class="content">
+        <h3 class="project-title"><span class="inline-date">Mar 2026 <span class="sep">•</span> </span>AI Onboarding</h3>
+        <p class="project-desc">A causal analysis in <em>PostHog</em> showed users trying 5+ features <strong>convert 5.6× more</strong>, AI features lifting Pro the most: rebuilt onboarding to put <strong>AI first</strong></p>
+        <div class="metrics"><div class="m"><div class="m-val">+30%</div><div class="m-lbl">Subscriptions</div></div><div class="m"><div class="m-val">+15%</div><div class="m-lbl">New MRR</div></div><div class="m"><div class="m-val">+70%</div><div class="m-lbl">AI conversion</div></div></div>
+        <figure class="shot locked"><img src="images/submagic-onboarding.jpg" alt="Submagic AI tools shown to a new user" loading="lazy"><div class="veil"><button class="unlock" type="button" data-case="Submagic AI onboarding"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>See the full case study</button></div></figure>
+      </div>
+    </section>
+    <section class="row project-row">
+      <p class="row-date">Jan 2026</p>
+      <span class="mark mark-dot" aria-hidden="true"></span>
+      <div class="content">
+        <h3 class="project-title"><span class="inline-date">Jan 2026 <span class="sep">•</span> </span>Subscription Paywall</h3>
+        <p class="project-desc">Came up with the paywall at the export step and shipped it to <strong>make revenue take off</strong>, <strong>5 variants</strong> tested</p>
+        <div class="metrics"><div class="m"><div class="m-val">+50%</div><div class="m-lbl">Subscriptions</div></div><div class="m"><div class="m-val">+30%</div><div class="m-lbl">New MRR</div></div><div class="m"><div class="m-val">99.5%</div><div class="m-lbl">Win probability</div></div></div>
+        <figure class="shot locked"><img src="images/submagic-paywall.jpg" alt="Submagic paywall shown at export" loading="lazy"><div class="veil"><button class="unlock" type="button" data-case="Submagic subscription paywall"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>See the full case study</button></div></figure>
+      </div>
+    </section>
+    <article class="row">
+      <p class="row-date">2025</p>
+      <a class="mark" href="https://www.lewagon.com" target="_blank" rel="noopener" aria-label="Le Wagon website"><img src="images/logo-lewagon.png" alt=""></a>
+      <div class="content">
+        <h2 class="company"><a href="https://www.lewagon.com" target="_blank" rel="noopener">Le Wagon</a></h2>
+        <p class="role"><span class="inline-date">2025 <span class="sep">•</span> </span>AI Software <span class="sep">•</span> Bootcamp</p>
+        <p class="headline">Coding bootcamp: built and shipped web apps with <em>Ruby on Rails</em>, <em>JavaScript</em> and AI</p>
+      </div>
+    </article>
+    <article class="row">
+      <p class="row-date">2024 – 2025</p>
+      <span class="mark mark-emoji" aria-hidden="true">🚐</span>
+      <div class="content">
+        <h2 class="company">Gap year</h2>
+        <p class="role"><span class="inline-date">2024 – 2025 <span class="sep">•</span> </span>Career break <span class="sep">•</span> 1 year</p>
+        <p class="headline">Drove down the Panamerican highway from Montreal to Ushuaïa in a self-converted van</p>
+      </div>
+    </article>
+    <article class="row">
+      <p class="row-date">2021 – 2024</p>
+      <a class="mark" href="https://www.pennylane.com" target="_blank" rel="noopener" aria-label="Pennylane website"><img src="images/logo-pennylane.png" alt=""></a>
+      <div class="content">
+        <h2 class="company"><a href="https://www.pennylane.com" target="_blank" rel="noopener">Pennylane</a></h2>
+        <p class="role"><span class="inline-date">2021 – 2024 <span class="sep">•</span> </span>Product Manager <span class="sep">•</span> Permanent <span class="sep">•</span> 4 years</p>
+        <p class="headline"><strong>€30M → €1B valuation</strong></p><p class="context">Built the financial B2B SaaS from users to scale among the first PMs</p>
+        <div class="company-kpis"><div class="metrics"><div class="m"><div class="m-val">€30K → €30M</div><div class="m-lbl">ARR</div></div><div class="m"><div class="m-val">2,000</div><div class="m-lbl">Accounting firms</div></div><div class="m"><div class="m-val">#2 PM</div><div class="m-lbl">Of 65 employees</div></div></div></div>
+      </div>
+    </article>
+    <section class="row project-row">
+      <p class="row-date">2023</p>
+      <span class="mark mark-dot" aria-hidden="true"></span>
+      <div class="content">
+        <h3 class="project-title"><span class="inline-date">2023 <span class="sep">•</span> </span>Accounting Automation</h3>
+        <p class="project-desc">Built the <strong>Rules center</strong>: transactions and invoices <strong>booked automatically</strong> with their account, VAT and tags, under one explicit precedence</p>
+        <div class="metrics"><div class="m"><div class="m-val">19% → &lt;10%</div><div class="m-lbl">Support contact rate</div></div><div class="m"><div class="m-val">120K</div><div class="m-lbl">Businesses covered</div></div><div class="m"><div class="m-val">80%</div><div class="m-lbl">Rules auto-created</div></div></div>
+        <figure class="shot locked"><img src="images/pennylane-rules.jpg" alt="Pennylane rules center: supplier rules and the automatic assignment of a supplier" loading="lazy"><div class="veil"><button class="unlock" type="button" data-case="Pennylane rules center"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>See the full case study</button></div></figure>
+      </div>
+    </section>
+    <section class="row project-row">
+      <p class="row-date">2022</p>
+      <span class="mark mark-dot" aria-hidden="true"></span>
+      <div class="content">
+        <h3 class="project-title"><span class="inline-date">2022 <span class="sep">•</span> </span>Mobile iOS/Android</h3>
+        <p class="project-desc">Launched the <strong>mobile companion app</strong> for accountants and their clients on both platforms</p>
+        <div class="metrics"><div class="m"><div class="m-val">0 → 10K</div><div class="m-lbl">Users</div></div><div class="m"><div class="m-val">4.7★</div><div class="m-lbl">Rating</div></div><div class="m"><div class="m-val">2</div><div class="m-lbl">Platforms</div></div></div>
+        <figure class="shot locked"><img src="images/pennylane-mobile.jpg" alt="Pennylane app on the App Store" loading="lazy"><div class="veil"><button class="unlock" type="button" data-case="Pennylane mobile app"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>See the full case study</button></div></figure>
+      </div>
+    </section>
+    <section class="row project-row">
+      <p class="row-date">2021</p>
+      <span class="mark mark-dot" aria-hidden="true"></span>
+      <div class="content">
+        <h3 class="project-title"><span class="inline-date">2021 <span class="sep">•</span> </span>Expenses Management</h3>
+        <p class="project-desc">Built the expense module <strong>from zero to 150K users</strong> with <strong>AI-powered tagging</strong></p>
+        <div class="metrics"><div class="m"><div class="m-val">0 → 150K</div><div class="m-lbl">Users</div></div><div class="m"><div class="m-val">30×</div><div class="m-lbl">Productivity</div></div><div class="m"><div class="m-val">AI</div><div class="m-lbl">Tagging</div></div></div>
+        <figure class="shot locked"><img src="images/pennylane-purchases.jpg" alt="Pennylane supplier invoices page" loading="lazy"><div class="veil"><button class="unlock" type="button" data-case="Pennylane expenses management"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>See the full case study</button></div></figure>
+      </div>
+    </section>
+    <article class="row">
+      <p class="row-date">2019 – 2021</p>
+      <a class="mark" href="https://www.younited-credit.com" target="_blank" rel="noopener" aria-label="Younited Credit website"><img src="images/logo-younited.png" alt=""></a>
+      <div class="content">
+        <h2 class="company"><a href="https://www.younited-credit.com" target="_blank" rel="noopener">Younited Credit</a></h2>
+        <p class="role"><span class="inline-date">2019 – 2021 <span class="sep">•</span> </span>Product Manager <span class="sep">•</span> Permanent <span class="sep">•</span> 1.5 years</p>
+        <p class="headline"><strong>€400M+ valuation</strong></p><p class="context">Led product for customer account and internal CRM across 5 countries</p>
+        <div class="company-kpis"><div class="metrics"><div class="m"><div class="m-val">€50M → €75M</div><div class="m-lbl">ARR</div></div><div class="m"><div class="m-val">€180M</div><div class="m-lbl">Equity raised</div></div><div class="m"><div class="m-val">5</div><div class="m-lbl">Countries</div></div></div></div>
+      </div>
+    </article>
+    <article class="row">
+      <p class="row-date">2018 – 2019</p>
+      <a class="mark" href="https://www.hiresweet.com" target="_blank" rel="noopener" aria-label="HireSweet website"><img src="images/logo-hiresweet.png" alt=""></a>
+      <div class="content">
+        <h2 class="company"><a href="https://www.hiresweet.com" target="_blank" rel="noopener">HireSweet</a></h2>
+        <p class="role"><span class="inline-date">2018 – 2019 <span class="sep">•</span> </span>Product Analyst <span class="sep">•</span> 1 year</p>
+        <p class="headline"><strong>Automated sourcing for tech hiring</strong></p><p class="context">Worked operations and helped steer ML engine iterations</p>
+        <div class="company-kpis"><div class="metrics"><div class="m"><div class="m-val">€0 → €5M</div><div class="m-lbl">Valuation</div></div><div class="m"><div class="m-val">700+</div><div class="m-lbl">Start-ups served</div></div><div class="m"><div class="m-val">500+</div><div class="m-lbl">Candidates sourced</div></div></div></div>
+      </div>
+    </article>
+    <article class="row">
+      <p class="row-date">2018 – 2019</p>
+      <a class="mark" href="https://www.polytechnique.edu" target="_blank" rel="noopener" aria-label="École Polytechnique website"><img src="images/logo-polytechnique.png" alt=""></a>
+      <div class="content">
+        <h2 class="company"><a href="https://www.polytechnique.edu" target="_blank" rel="noopener">École Polytechnique</a></h2>
+        <p class="role"><span class="inline-date">2018 – 2019 <span class="sep">•</span> </span>Master of Research, Innovation and Product design <span class="sep">•</span> Joint degree with HEC Paris</p>
+      </div>
+    </article>
+    <article class="row">
+      <p class="row-date">2015 – 2019</p>
+      <a class="mark" href="https://www.hec.edu" target="_blank" rel="noopener" aria-label="HEC Paris website"><img src="images/logo-hec.png" alt=""></a>
+      <div class="content">
+        <h2 class="company"><a href="https://www.hec.edu" target="_blank" rel="noopener">HEC Paris</a></h2>
+        <p class="role"><span class="inline-date">2015 – 2019 <span class="sep">•</span> </span>MSc in Management</p>
+      </div>
+    </article>
+  </div>
+
+  <footer class="footer">© 2026 Rodolphe Le Coent · Made with <svg class="heart" viewBox="0 0 24 24" role="img" aria-label="love"><path d="M12 21s-7.5-4.6-9.9-9.1C.6 8.9 2.4 4.5 6.6 4.5c2.3 0 3.9 1.3 5.4 3.1 1.5-1.8 3.1-3.1 5.4-3.1 4.2 0 6 4.4 4.5 7.4C19.5 16.4 12 21 12 21z"/></svg> in Lyon</footer>
 </main>
+
+<dialog id="request-dialog" aria-labelledby="request-title">
+  <form class="sheet" id="request-form" novalidate>
+    <div class="sheet-head">
+      <h2 class="sheet-title" id="request-title">Case study</h2>
+      <p class="sheet-intro">Unlock access to the details of the full case study</p>
+    </div>
+    <div class="field-row">
+      <div class="field"><label for="request-first-name">First name</label><input id="request-first-name" name="first_name" autocomplete="given-name" required></div>
+      <div class="field"><label for="request-last-name">Last name</label><input id="request-last-name" name="last_name" autocomplete="family-name" required></div>
+    </div>
+    <div class="field"><label for="request-email">Work email</label><input id="request-email" name="email" type="email" autocomplete="email" required></div>
+    <div class="field"><label for="request-phone">Phone number</label><input id="request-phone" name="phone" type="tel" autocomplete="tel" required></div>
+    <div class="trap" aria-hidden="true"><label for="request-website">Website</label><input id="request-website" name="website" tabindex="-1" autocomplete="off"></div>
+    <input type="hidden" id="request-case" name="case_study">
+    <p class="error" id="request-error" hidden></p>
+    <div class="actions">
+      <button class="btn btn-primary" type="submit" id="request-submit">Unlock</button>
+    </div>
+  </form>
+  <div class="sheet" id="request-done" hidden>
+    <div class="sheet-head">
+      <h2 class="sheet-title" id="request-done-title">Request received</h2>
+      <p class="sheet-intro" id="request-done-text">The case study comes to your inbox within two working days</p>
+    </div>
+    <div class="actions"><button class="btn btn-primary" type="button" id="request-close">Close</button></div>
+  </div>
+</dialog>
+
+<script>
+// Empty until the lead endpoint exists: the form then hands the visitor the address to write to
+const LEAD_ENDPOINT = "";
+const OWNER_EMAIL = "rodolphe@lecoent.net";
+
+const track = document.querySelector(".track");
+const rail = document.querySelector(".rail");
+const fill = document.querySelector(".rail-fill");
+const rows = [...document.querySelectorAll(".row")];
+const centerOf = element => { const box = element.getBoundingClientRect(); return box.top + box.height / 2; };
+
+function drawRail() {
+  const trackTop = track.getBoundingClientRect().top;
+  const first = centerOf(rows[0].querySelector(".mark"));
+  const last = centerOf(rows[rows.length - 1].querySelector(".mark"));
+  rail.style.top = (first - trackTop) + "px";
+  rail.style.height = (last - first) + "px";
+  const reading = window.innerHeight * 0.5;
+  fill.style.height = Math.min(Math.max(reading - first, 0), last - first) + "px";
+  rows.forEach(row => row.classList.toggle("is-past", centerOf(row.querySelector(".mark")) <= reading));
+}
+let pending = false;
+addEventListener("scroll", () => { if (!pending) { pending = true; requestAnimationFrame(() => { drawRail(); pending = false; }); } }, { passive: true });
+addEventListener("resize", drawRail);
+addEventListener("load", drawRail);
+document.querySelectorAll("img").forEach(image => image.addEventListener("load", drawRail));
+drawRail();
+
+const dialog = document.getElementById("request-dialog");
+const form = document.getElementById("request-form");
+const done = document.getElementById("request-done");
+const error = document.getElementById("request-error");
+const submit = document.getElementById("request-submit");
+
+function showDone(title, html) {
+  document.getElementById("request-done-title").textContent = title;
+  document.getElementById("request-done-text").innerHTML = html;
+  form.hidden = true;
+  done.hidden = false;
+}
+
+document.querySelectorAll(".unlock").forEach(button => button.addEventListener("click", () => {
+  document.getElementById("request-case").value = button.dataset.case;
+  form.hidden = false;
+  done.hidden = true;
+  error.hidden = true;
+  dialog.showModal();
+  document.getElementById("request-first-name").focus();
+}));
+dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); });
+document.getElementById("request-close").addEventListener("click", () => dialog.close());
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!form.checkValidity()) {
+    error.textContent = "Fill in every field with a valid work email";
+    error.hidden = false;
+    return;
+  }
+  const data = Object.fromEntries(new FormData(form));
+  data.page = location.href;
+  if (!LEAD_ENDPOINT) {
+    const caseStudy = data.case_study.replace(/[<>&]/g, "");
+    showDone("One last step", "Write to <span class=\"address\">" + OWNER_EMAIL + "</span> with the subject “Case study: " + caseStudy + "” and it comes back within two working days.");
+    return;
+  }
+  submit.disabled = true;
+  error.hidden = true;
+  try {
+    const response = await fetch(LEAD_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    if (!response.ok) throw new Error(response.status);
+    showDone("Request received", "The case study comes to your inbox within two working days.");
+    form.reset();
+  } catch {
+    error.innerHTML = "The request did not go through. Write to <span class=\"address\">" + OWNER_EMAIL + "</span> instead.";
+    error.hidden = false;
+  } finally {
+    submit.disabled = false;
+  }
+});
+</script>
 </body>
 </html>
