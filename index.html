@@ -369,8 +369,8 @@ dialog::backdrop { background: rgba(26, 26, 24, 0.35); }
 </dialog>
 
 <script>
-// Empty until the lead endpoint exists: the form then hands the visitor the address to write to
-const LEAD_ENDPOINT = "";
+// Apps Script web app (leads/Code.js): appends a row to the "Portfolio leads" sheet and emails the owner. Empty: the form hands the visitor the address to write to
+const LEAD_ENDPOINT = "https://script.google.com/macros/s/AKfycbx6HagpiLOMD4AntTstqMIw-zg95z3aY-9GMMwCoYW9nfHsnBIUy_eUZqivaEat9gzF_w/exec";
 const OWNER_EMAIL = "rodolphe@lecoent.net";
 
 const track = document.querySelector(".track");
@@ -437,8 +437,10 @@ form.addEventListener("submit", async event => {
   submit.disabled = true;
   error.hidden = true;
   try {
-    const response = await fetch(LEAD_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-    if (!response.ok) throw new Error(response.status);
+    // A plain-text body keeps the request simple: Apps Script answers no CORS preflight
+    const response = await fetch(LEAD_ENDPOINT, { method: "POST", body: JSON.stringify(data) });
+    const result = await response.json();
+    if (!result.ok) throw new Error("rejected");
     showDone("Request received", "The case study comes to your inbox within two working days.");
     form.reset();
   } catch {
